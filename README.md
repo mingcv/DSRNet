@@ -5,9 +5,6 @@
 > College of Intelligence and Computing, Tianjin University<br>
 
 
-## Network Architecture
-![fig_arch](https://github.com/mingcv/DSRNet/assets/31566437/2a4bb4be-9d03-40eb-b585-f2d5f8a44f42)
-
 
 ## Impressive Restoration Quality of Reflection Layers
 ![image](https://github.com/mingcv/DSRNet/assets/31566437/e75e2abb-c413-4250-acd1-3f10e9d887b1)
