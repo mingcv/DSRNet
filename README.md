@@ -22,8 +22,8 @@
 
 ### Usage
 
-#### Training 
-```python train_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset --loss losses  --name dsrnet_l  --lambda_vgg 0.01 --lambda_rec 0.2 --if_align --seed 2018 --base_dir "[YOUR DATA DIR]"
+#### Training ```
+```python train_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset --loss losses  --name dsrnet_l  --lambda_vgg 0.01 --lambda_rec 0.2 --if_align --seed 2018 --base_dir "[YOUR DATA DIR]"```
 #### Testing 
 ```python test_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset --name dsrnet_l_test --if_align --base_dir "[YOUR DATA DIR]" --resume --icnn_path ./checkpoints/ytmt_uct_sirs/ytmt_uct_sirs_68_077_00595364.pt```
 
