@@ -1,6 +1,6 @@
 # DSRNet: Single Image Reflection Separation via Component Synergy (ICCV 2023)
 
-> :book: [Arxiv] [[Supp.](https://github.com/mingcv/DSRNet/files/12387445/full_arxiv_version_supp.pdf)] <br>
+> :book: [[Arxiv](https://arxiv.org/abs/2308.10027)] [[Supp.](https://github.com/mingcv/DSRNet/files/12387445/full_arxiv_version_supp.pdf)] <br>
 > [Qiming Hu](https://scholar.google.com.hk/citations?user=4zasPbwAAAAJ), [Xiaojie Guo](https://sites.google.com/view/xjguo/homepage) <br>
 > College of Intelligence and Computing, Tianjin University<br>
 
