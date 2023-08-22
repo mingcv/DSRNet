@@ -23,13 +23,9 @@
 ### Usage
 
 #### Training 
-* For stage 1: ```python train_sirs.py --inet ytmt_ucs --model ytmt_model_sirs --name ytmt_ucs_sirs --hyper --if_align```
-* For stage 2: ```python train_twostage_sirs.py --inet ytmt_ucs --model twostage_ytmt_model --name ytmt_uct_sirs --hyper --if_align --resume --resume_epoch xx --checkpoints_dir xxx```
-
+```python train_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset --loss losses  --name dsrnet_l  --lambda_vgg 0.01 --lambda_rec 0.2 --if_align --seed 2018 --base_dir "[YOUR DATA DIR]"
 #### Testing 
-```python test_sirs.py --inet ytmt_ucs_old --model twostage_ytmt_model --name ytmt_uct_sirs_test --hyper --if_align --resume --icnn_path ./checkpoints/ytmt_uct_sirs/ytmt_uct_sirs_68_077_00595364.pt```
-
-*Note: "ytmt_ucs_old" is only for our provided checkpoint, and please change it as "ytmt_ucs" when you train our model by yourself, since it is a refactorized verison for a better view.*
+```python test_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset --name dsrnet_l_test --if_align --base_dir "[YOUR DATA DIR]" --resume --icnn_path ./checkpoints/ytmt_uct_sirs/ytmt_uct_sirs_68_077_00595364.pt```
 
 #### Trained weights
 [Google Drive](https://drive.google.com/file/d/1yOKFzhhFUdbKzU3eafYKFLN7AdHqW4_7/view?usp=sharing)
