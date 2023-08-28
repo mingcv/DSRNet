@@ -28,7 +28,10 @@
 ```python test_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset --name dsrnet_l_test --if_align --base_dir "[YOUR DATA DIR]" --resume --icnn_path ./checkpoints/ytmt_uct_sirs/ytmt_uct_sirs_68_077_00595364.pt```
 
 #### Trained weights
-[Google Drive](https://drive.google.com/file/d/1yOKFzhhFUdbKzU3eafYKFLN7AdHqW4_7/view?usp=sharing)
+
+![image](https://github.com/mingcv/DSRNet/assets/31566437/63e9325a-f613-40db-a8e1-9a7ee172dc68)
+
+
 
 #### Visual comparison on real20 and SIR^2
 ![image](https://github.com/mingcv/DSRNet/assets/31566437/0d32ee2b-4c9e-46ad-834b-6b08fc6aadd5)
