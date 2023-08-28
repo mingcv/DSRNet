@@ -145,34 +145,34 @@ class DSRNetModel(DSRNetBase):
     def print_network(self):
         print('--------------------- Model ---------------------')
         print('##################### NetG #####################')
-        networks.print_network(self.net_i)
+        networks.print_network(self.network)
 
     def _eval(self):
-        self.net_i.eval()
+        self.network.eval()
 
     def _train(self):
-        self.net_i.train()
+        self.network.train()
 
     def initialize(self, opt):
         BaseModel.initialize(self, opt)
         in_channels = 3
         losses = getattr(models, self.opt.loss)
         self.vgg = losses.Vgg19(requires_grad=False).to(self.device)
-        self.net_i = arch.__dict__[self.opt.inet](in_channels, 3).to(self.device)
-        networks.init_weights(self.net_i, init_type=opt.init_type)  # using default initialization as EDSR
+        self.network = arch.__dict__[self.opt.inet](in_channels, 3).to(self.device)
+        networks.init_weights(self.network, init_type=opt.init_type)  # using default initialization as EDSR
 
         if self.isTrain:
             # define loss functions
             self.loss_dic = losses.init_loss(opt)
             self.loss_dic['vgg'] = losses.VGGLoss(self.vgg)
             # initialize optimizers
-            self.optimizer_G = torch.optim.Adam(self.net_i.parameters(),
+            self.optimizer_G = torch.optim.Adam(self.network.parameters(),
                                                 lr=opt.lr, betas=(0.9, 0.999), weight_decay=opt.wd)
 
             self._init_optimizer([self.optimizer_G])
 
         if opt.resume:
-            self.load(self, opt.resume_epoch)
+            self.load(self)
 
         if opt.no_verbose is False:
             self.print_network()
@@ -195,7 +195,7 @@ class DSRNetModel(DSRNetBase):
     def forward(self):
         # without edge
         input_i = self.input
-        output_t, output_r, output_rr = self.net_i(input_i,
+        output_t, output_r, output_rr = self.network(input_i,
                                                    self.vgg(input_i),
                                                    fn=self.data_name[0] if self.data_name else None)
         self.output_t = output_t
@@ -240,30 +240,15 @@ class DSRNetModel(DSRNetBase):
 
         return ret_visuals
 
-    def load(self, model, resume_epoch=None):
-        icnn_path = model.opt.icnn_path
-        if icnn_path is None:
-            model_path = util.get_model_list(model.opt.weight_dir, self.opt.name, epoch=resume_epoch)
-            state_dict = torch.load(model_path)
-            model.epoch = state_dict['epoch']
-            model.iterations = state_dict['iterations']
-            model.net_i.load_state_dict(state_dict['icnn'])
-
-        else:
-            state_dict = torch.load(icnn_path)
-            model.net_i.load_state_dict(state_dict['icnn'])
-            model.epoch = state_dict['epoch']
-            model.iterations = state_dict['iterations']
-
-        if model.isTrain:
-            model.optimizer_G.load_state_dict(state_dict['opt_g'])
-
-        print('Resume from epoch %d, iteration %d' % (model.epoch, model.iterations))
+    def load(self, model):
+        weight_path = model.opt.weight_path
+        state_dict = torch.load(weight_path)
+        model.network.load_state_dict(state_dict)
         return state_dict
 
     def state_dict(self, save_extra_state=True):
         state_dict = {
-            'icnn': self.net_i.state_dict(),
+            'weight': self.network.state_dict(),
             'epoch': self.epoch,
             'iterations': self.iterations
         }

@@ -75,20 +75,17 @@ class DualStreamSeq(nn.Sequential):
 class DualStreamBlock(nn.Module):
     def __init__(self, *args):
         super(DualStreamBlock, self).__init__()
-        self.seq_l = nn.Sequential()
-        self.seq_r = nn.Sequential()
+        self.seq = nn.Sequential()
 
         if len(args) == 1 and isinstance(args[0], OrderedDict):
             for key, module in args[0].items():
-                self.seq_l.add_module(key, module)
-                self.seq_r.add_module(key, module)
+                self.seq.add_module(key, module)
         else:
             for idx, module in enumerate(args):
-                self.seq_l.add_module(str(idx), module)
-                self.seq_r.add_module(str(idx), module)
+                self.seq.add_module(str(idx), module)
 
     def forward(self, x, y):
-        return self.seq_l(x), self.seq_r(y)
+        return self.seq(x), self.seq(y)
 
 
 class MuGIBlock(nn.Module):
@@ -120,14 +117,16 @@ class MuGIBlock(nn.Module):
 
         )
 
-        self.b = nn.Parameter(torch.zeros((1, c, 1, 1)), requires_grad=True)
+        self.b_l = nn.Parameter(torch.zeros((1, c, 1, 1)), requires_grad=True)
+        self.b_r = nn.Parameter(torch.zeros((1, c, 1, 1)), requires_grad=True)
 
     def forward(self, inp_l, inp_r):
         x, y = self.block1(inp_l, inp_r)
         x_skip, y_skip = inp_l + x * self.a_l, inp_r + y * self.a_r
         x, y = self.block2(x_skip, y_skip)
-        out_l, out_r = x_skip + x * self.b, y_skip + y * self.b
+        out_l, out_r = x_skip + x * self.b_l, y_skip + y * self.b_r
         return out_l, out_r
+
 
 class FeaturePyramidVGG(nn.Module):
     def __init__(self, out_channels=64):
@@ -192,56 +191,32 @@ class FeaturePyramidVGG(nn.Module):
         )
 
     def forward(self, inp, vgg_feats):
-        # for vf in vgg_feats:
-        #     print(vf.shape)
-
         # 64,128,256,512,512
         vf1, vf2, vf3, vf4, vf5 = vgg_feats
-        # fvis.visulizeFeatureMap(vf1, 'vf1.png')
-        # fvis.visulizeFeatureMap(vf2, 'vf2.png')
-        # fvis.visulizeFeatureMap(vf3, 'vf3.png')
-        # fvis.visulizeFeatureMap(vf4, 'vf4.png')
-        # fvis.visulizeFeatureMap(vf5, 'vf5.png')
         # 512=>512,512=>512
         f5_l, f5_r = self.block5(vf5)
         f4_l, f4_r = self.block4(vf4)
-        # (512+512,512+512)->(256,256)
         f4_l, f4_r = self.ch_map4(torch.cat([f5_l, f4_l], dim=1), torch.cat([f5_r, f4_r], dim=1))
-        # fvis.visulizeFeatureMap(f4_l, 'f4_l.png')
-        # fvis.visulizeFeatureMap(f4_r, 'f4_r.png')
-
         # 256 => 256
         f3_l, f3_r = self.block3(vf3)
         # (256+256,256+256)->(128,128)
         f3_l, f3_r = self.ch_map3(torch.cat([f4_l, f3_l], dim=1), torch.cat([f4_r, f3_r], dim=1))
-        # fvis.visulizeFeatureMap(f3_l, 'f3_l.png')
-        # fvis.visulizeFeatureMap(f3_r, 'f3_r.png')
-
         # (128+128,128+128)->(64,64)
         f2_l, f2_r = self.block2(vf2)
         f2_l, f2_r = self.ch_map2(torch.cat([f3_l, f2_l], dim=1), torch.cat([f3_r, f2_r], dim=1))
-        # fvis.visulizeFeatureMap(f2_l, 'f2_l.png')
-        # fvis.visulizeFeatureMap(f2_r, 'f2_r.png')
-
         # (64+64,64+64)->(32,32)
         f1_l, f1_r = self.block1(vf1)
         f1_l, f1_r = self.ch_map1(torch.cat([f2_l, f1_l], dim=1), torch.cat([f2_r, f1_r], dim=1))
-        # fvis.visulizeFeatureMap(f1_l, 'f1_l.png')
-        # fvis.visulizeFeatureMap(f1_r, 'f1_r.png')
-
         # 64
         f0_l, f0_r = self.block_intro(inp, inp)
         f0_l, f0_r = self.ch_map0(torch.cat([f1_l, f0_l], dim=1), torch.cat([f1_r, f0_r], dim=1))
-        # fvis.visulizeFeatureMap(f0_l, 'f0_l.png')
-        # fvis.visulizeFeatureMap(f0_r, 'f0_r.png')
-        # exit(0)
-
         return f0_l, f0_r
 
+
 class DSRNet(nn.Module):
-    def __init__(self, in_channels=3, out_channels=3, width=24, middle_blk_num=1, enc_blk_nums=[], dec_blk_nums=[]):
+    def __init__(self, in_channels=3, out_channels=3, width=48, middle_blk_num=1, enc_blk_nums=[], dec_blk_nums=[]):
         super().__init__()
-        self.intro = FeaturePyramidVGG()
+        self.intro = FeaturePyramidVGG(out_channels=width)
         self.ending = DualStreamBlock(nn.Conv2d(width, out_channels, 3, padding=1))
         self.encoders = nn.ModuleList()
         self.decoders = nn.ModuleList()
@@ -305,24 +280,19 @@ class DSRNet(nn.Module):
 
 
 if __name__ == '__main__':
-    from tools import mutils
-
-    x = torch.ones(1, 3, 256, 256).cuda()
+    x = torch.ones(1, 3, 224, 224).cuda()
     feats = [
-        torch.ones(1, 64, 128, 128).cuda(),
-        torch.ones(1, 192, 64, 64).cuda(),
-        torch.ones(1, 384, 32, 32).cuda(),
-        torch.ones(1, 768, 16, 16).cuda(),
-        torch.ones(1, 2560, 8, 8).cuda(),
+        torch.ones(1, 64, 224, 224).cuda(),
+        torch.ones(1, 128, 112, 112).cuda(),
+        torch.ones(1, 256, 56, 56).cuda(),
+        torch.ones(1, 512, 28, 28).cuda(),
+        torch.ones(1, 512, 14, 14).cuda(),
     ]
-    enc_blks = [2, 2, 4, 8]
-    middle_blk_num = 12
-    dec_blks = [2, 2, 2, 2]
 
-    model = FINet(3, 3, width=48, middle_blk_num=middle_blk_num,
-                  enc_blk_nums=enc_blks, dec_blk_nums=dec_blks).cuda()
-    mutils.count_parameters(model)
-    mutils.count_parameters(model.intro)
-
-    out_l, out_r = model(x, feats)
-    print(out_l.shape, out_r.shape)
+    enc_blks = [2, 2, 2]
+    middle_blk_num = 4
+    dec_blks = [2, 2, 2]
+    model = DSRNet(3, 3, width=32, middle_blk_num=middle_blk_num,
+                   enc_blk_nums=enc_blks, dec_blk_nums=dec_blks).cuda()
+    out_t, out_r, out_rr = model(x, feats)
+    print(out_t.shape, out_r.shape, out_rr.shape)

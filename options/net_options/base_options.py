@@ -14,7 +14,7 @@ class BaseOptions(Base):
         # experiment specifics
         self.parser.add_argument('--inet', type=str, default='net_options',
                                  help='chooses which architecture to use for inet.')
-        self.parser.add_argument('--icnn_path', type=str, default=None, help='icnn checkpoint to use.')
+        self.parser.add_argument('--weight_path', type=str, default=None, help='pretrained checkpoint to use.')
         self.parser.add_argument('--init_type', type=str, default='edsr',
                                  help='network initialization [normal|xavier|kaiming|orthogonal|uniform]')
         # for network
