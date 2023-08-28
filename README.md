@@ -25,12 +25,11 @@
 #### Training ```
 ```python train_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset --loss losses  --name dsrnet_l  --lambda_vgg 0.01 --lambda_rec 0.2 --if_align --seed 2018 --base_dir "[YOUR DATA DIR]"```
 #### Testing 
-```python test_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset --name dsrnet_l_test --if_align --base_dir "[YOUR DATA DIR]" --resume --icnn_path ./checkpoints/ytmt_uct_sirs/ytmt_uct_sirs_68_077_00595364.pt```
+```python eval_sirs.py --inet dsrnet_s --model dsrnet_model_sirs --dataset sirs_dataset  --name dsrnet_s_test --hyper --if_align --resume --weight_path "./weights/dsrnet_s_epoch14.pt" --base_dir "[YOUR_DATA_DIR]"```
 
 #### Trained weights
 
 ![image](https://github.com/mingcv/DSRNet/assets/31566437/63e9325a-f613-40db-a8e1-9a7ee172dc68)
-
 
 
 #### Visual comparison on real20 and SIR^2
