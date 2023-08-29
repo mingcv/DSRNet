@@ -20,7 +20,7 @@
 * 20 real testing pairs provided by [Zhang *et al.*](https://github.com/ceciliavision/perceptual-reflection-removal)
 * 454 real testing pairs from [SIR^2 dataset](https://sir2data.github.io/), containing three subsets (i.e., Objects (200), Postcard (199), Wild (55)). 
 
-[All in one](https://drive.google.com/file/d/1hFZItZAzAt-LnfNj-2phBRwqplDUasQy/view?usp=sharing)
+Download all in one by [Google Drive](https://drive.google.com/file/d/1hFZItZAzAt-LnfNj-2phBRwqplDUasQy/view?usp=sharing) or [百度云]().
 ### Usage
 
 #### Training 
@@ -28,16 +28,13 @@
 #### Evaluation 
 ```python eval_sirs.py --inet dsrnet_s --model dsrnet_model_sirs --dataset sirs_dataset  --name dsrnet_s_test --hyper --if_align --resume --weight_path "./weights/dsrnet_s_epoch14.pt" --base_dir "[YOUR_DATA_DIR]"```
 
-More commands can be found in scripts.sh.
+More commands can be found in [scripts.sh](https://github.com/mingcv/DSRNet/blob/main/scripts.sh).
 
 #### Trained weights
 
-[Google Drive](https://drive.google.com/drive/folders/1AIS9-EgBN3_q-TCq7W0j5OeWMgLO_de0?usp=sharing)
-
-[百度云](https://pan.baidu.com/s/17jW9oBAfIZ03FKa3jc-qig?pwd=1231)
+Download the trained weights by [Google Drive](https://drive.google.com/drive/folders/1AIS9-EgBN3_q-TCq7W0j5OeWMgLO_de0?usp=sharing) or [百度云](https://pan.baidu.com/s/17jW9oBAfIZ03FKa3jc-qig?pwd=1231) and drop them into the "weights" dir.
 
 ![image](https://github.com/mingcv/DSRNet/assets/31566437/e17684dc-908a-46d4-ad17-420d6f1c1191)
-
 
 
 #### Visual comparison on real20 and SIR^2
