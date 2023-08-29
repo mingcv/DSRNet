@@ -105,7 +105,16 @@ class ReflectionSynthesis(object):
         a = np.random.uniform(self.alpha_range[0], self.alpha_range[1])
         b = np.random.uniform(self.beta_range[0], self.beta_range[1])
         T, R = a * T_, b * R_
-        I = T + R - T * R
+
+        if random.random() < 0.7:
+            I = T + R - T * R
+        else:
+            I = T + R
+            if np.max(I) > 1:
+                m = I[I > 1]
+                m = (np.mean(m) - 1) * 1.3
+                I = np.clip(T + np.clip(R - m, 0, 1), 0, 1)
+
         return T_, R_, I
 
 

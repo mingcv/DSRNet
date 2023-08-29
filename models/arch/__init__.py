@@ -4,26 +4,27 @@ from models.arch.dsrnet import DSRNet
 
 
 def dsrnet_s(in_channels=3, out_channels=3, width=32):
-    enc_blks = [2, 2, 2]  # Every blocks before downsampling
+    enc_blks = [2, 2, 2]
     middle_blk_num = 4
-    dec_blks = [2, 2, 2]  # Every blocks after upsampling
+    dec_blks = [2, 2, 2]
 
     return DSRNet(in_channels, out_channels, width=width,
                   middle_blk_num=middle_blk_num,
                   enc_blk_nums=enc_blks,
-                  dec_blk_nums=dec_blks)
+                  dec_blk_nums=dec_blks,
+                  shared_b=False)
 
 
 def dsrnet_l(in_channels=3, out_channels=3, width=64):
-    enc_blks = [2, 2, 4, 8]  # Every blocks before downsampling
+    enc_blks = [2, 2, 4, 8]
     middle_blk_num = 12
-    dec_blks = [2, 2, 2, 2]  # Every blocks after upsampling
+    dec_blks = [2, 2, 2, 2]
 
     return DSRNet(in_channels, out_channels, width=width,
                   middle_blk_num=middle_blk_num,
                   enc_blk_nums=enc_blks,
-                  dec_blk_nums=dec_blks)
-
+                  dec_blk_nums=dec_blks,
+                  shared_b=True)
 
 if __name__ == '__main__':
     from tools import mutils

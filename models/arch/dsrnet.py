@@ -89,7 +89,7 @@ class DualStreamBlock(nn.Module):
 
 
 class MuGIBlock(nn.Module):
-    def __init__(self, c):
+    def __init__(self, c, shared_b=False):
         super().__init__()
         self.block1 = DualStreamSeq(
             DualStreamBlock(
@@ -117,73 +117,80 @@ class MuGIBlock(nn.Module):
 
         )
 
-        self.b_l = nn.Parameter(torch.zeros((1, c, 1, 1)), requires_grad=True)
-        self.b_r = nn.Parameter(torch.zeros((1, c, 1, 1)), requires_grad=True)
+        self.shared_b = shared_b
+        if shared_b:
+            self.b = nn.Parameter(torch.zeros((1, c, 1, 1)), requires_grad=True)
+        else:
+            self.b_l = nn.Parameter(torch.zeros((1, c, 1, 1)), requires_grad=True)
+            self.b_r = nn.Parameter(torch.zeros((1, c, 1, 1)), requires_grad=True)
 
     def forward(self, inp_l, inp_r):
         x, y = self.block1(inp_l, inp_r)
         x_skip, y_skip = inp_l + x * self.a_l, inp_r + y * self.a_r
         x, y = self.block2(x_skip, y_skip)
-        out_l, out_r = x_skip + x * self.b_l, y_skip + y * self.b_r
+        if self.shared_b:
+            out_l, out_r = x_skip + x * self.b, y_skip + y * self.b
+        else:
+            out_l, out_r = x_skip + x * self.b_l, y_skip + y * self.b_r
         return out_l, out_r
 
 
 class FeaturePyramidVGG(nn.Module):
-    def __init__(self, out_channels=64):
+    def __init__(self, out_channels=64, shared_b=False):
         super().__init__()
         self.device = 'cuda'
         self.block5 = DualStreamSeq(
-            MuGIBlock(512),
+            MuGIBlock(512, shared_b),
             DualStreamBlock(nn.UpsamplingBilinear2d(scale_factor=2.0)),
         )
 
         self.block4 = DualStreamSeq(
-            MuGIBlock(512)
+            MuGIBlock(512, shared_b)
         )
 
         self.ch_map4 = DualStreamSeq(
             DualStreamBlock(
                 nn.Conv2d(in_channels=1024, out_channels=1024, kernel_size=1),
                 nn.PixelShuffle(2)),
-            MuGIBlock(256)
+            MuGIBlock(256, shared_b)
         )
 
         self.block3 = DualStreamSeq(
-            MuGIBlock(256)
+            MuGIBlock(256, shared_b)
         )
 
         self.ch_map3 = DualStreamSeq(
             DualStreamBlock(
                 nn.Conv2d(in_channels=512, out_channels=512, kernel_size=1),
                 nn.PixelShuffle(2)),
-            MuGIBlock(128)
+            MuGIBlock(128, shared_b)
         )
 
         self.block2 = DualStreamSeq(
-            MuGIBlock(128)
+            MuGIBlock(128, shared_b)
         )
 
         self.ch_map2 = DualStreamSeq(
             DualStreamBlock(
                 nn.Conv2d(in_channels=256, out_channels=256, kernel_size=1),
                 nn.PixelShuffle(2)),
-            MuGIBlock(64)
+            MuGIBlock(64, shared_b)
         )
 
         self.block1 = DualStreamSeq(
-            MuGIBlock(64),
+            MuGIBlock(64, shared_b),
         )
 
         self.ch_map1 = DualStreamSeq(
             DualStreamBlock(nn.Conv2d(in_channels=128, out_channels=128, kernel_size=1)),
-            MuGIBlock(128),
+            MuGIBlock(128, shared_b),
             DualStreamBlock(nn.Conv2d(in_channels=128, out_channels=32, kernel_size=1)),
-            MuGIBlock(32),
+            MuGIBlock(32, shared_b),
         )
 
         self.block_intro = DualStreamSeq(
             DualStreamBlock(nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3, padding=1)),
-            MuGIBlock(32)
+            MuGIBlock(32, shared_b)
         )
 
         self.ch_map0 = DualStreamBlock(
@@ -214,9 +221,10 @@ class FeaturePyramidVGG(nn.Module):
 
 
 class DSRNet(nn.Module):
-    def __init__(self, in_channels=3, out_channels=3, width=48, middle_blk_num=1, enc_blk_nums=[], dec_blk_nums=[]):
+    def __init__(self, in_channels=3, out_channels=3, width=48, middle_blk_num=1,
+                 enc_blk_nums=[], dec_blk_nums=[], shared_b=False):
         super().__init__()
-        self.intro = FeaturePyramidVGG(out_channels=width)
+        self.intro = FeaturePyramidVGG(width, shared_b)
         self.ending = DualStreamBlock(nn.Conv2d(width, out_channels, 3, padding=1))
         self.encoders = nn.ModuleList()
         self.decoders = nn.ModuleList()
@@ -229,7 +237,7 @@ class DSRNet(nn.Module):
         for num in enc_blk_nums:
             self.encoders.append(
                 DualStreamSeq(
-                    *[MuGIBlock(c) for _ in range(num)]
+                    *[MuGIBlock(c, shared_b) for _ in range(num)]
                 )
             )
             self.downs.append(
@@ -240,7 +248,7 @@ class DSRNet(nn.Module):
             c *= 2
 
         self.middle_blks = DualStreamSeq(
-            *[MuGIBlock(c) for _ in range(middle_blk_num)]
+            *[MuGIBlock(c, shared_b) for _ in range(middle_blk_num)]
         )
 
         for num in dec_blk_nums:
@@ -254,7 +262,7 @@ class DSRNet(nn.Module):
 
             self.decoders.append(
                 DualStreamSeq(
-                    *[MuGIBlock(c) for _ in range(num)]
+                    *[MuGIBlock(c, shared_b) for _ in range(num)]
                 )
             )
 
