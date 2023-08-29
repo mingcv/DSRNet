@@ -29,7 +29,12 @@
 
 #### Trained weights
 
-![image](https://github.com/mingcv/DSRNet/assets/31566437/63e9325a-f613-40db-a8e1-9a7ee172dc68)
+[Google Drive](https://drive.google.com/drive/folders/1AIS9-EgBN3_q-TCq7W0j5OeWMgLO_de0?usp=sharing)
+
+[百度云](https://pan.baidu.com/s/17jW9oBAfIZ03FKa3jc-qig?pwd=1231)
+
+![image](https://github.com/mingcv/DSRNet/assets/31566437/e17684dc-908a-46d4-ad17-420d6f1c1191)
+
 
 
 #### Visual comparison on real20 and SIR^2
