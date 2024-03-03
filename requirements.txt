@@ -1,0 +1,11 @@
+dominate==2.9.1
+einops==0.7.0
+kornia==0.7.1
+opencv-python==4.9.0.80
+PyYAML==6.0.1
+scikit-image==0.22.0
+scipy==1.12.0
+tensorboardX==2.6.2.2
+torch==2.2.1+cu118
+torchvision==0.17.1+cu118
+visdom==0.2.4
