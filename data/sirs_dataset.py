@@ -308,9 +308,9 @@ class RealDataset(BaseDataset):
 
 
 class FusionDataset(BaseDataset):
-    def __init__(self, datasets, fusion_ratios=None):
+    def __init__(self, datasets, fusion_ratios=None, size=None):
         self.datasets = datasets
-        self.size = sum([len(dataset) for dataset in datasets])
+        self.size = size or sum([len(dataset) for dataset in datasets])
         self.fusion_ratios = fusion_ratios or [1. / len(datasets)] * len(datasets)
         print('[i] using a fusion dataset: %d %s imgs fused with ratio %s' % (
             self.size, [len(dataset) for dataset in datasets], self.fusion_ratios))
