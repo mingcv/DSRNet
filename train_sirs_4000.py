@@ -46,7 +46,8 @@ train_dataset_nature = datasets.DSRTestDataset(datadir_nature, enable_transforms
 
 train_dataset_fusion = datasets.FusionDataset([train_dataset,
                                                train_dataset_real,
-                                               train_dataset_nature], [0.6, 0.2, 0.2])
+                                               train_dataset_nature], [0.6, 0.2, 0.2],
+                                               size=opt.num_train if opt.num_train > 0 else 4000)
 
 train_dataloader_fusion = datasets.DataLoader(
     train_dataset_fusion, batch_size=opt.batchSize, shuffle=not opt.serial_batches,
@@ -103,9 +104,6 @@ engine.model.opt.lambda_gan = 0
 set_learning_rate(opt.lr)
 
 while engine.epoch < 120:
-    if engine.epoch >= 20:
-        engine.model.opt.lambda_gan = 0.01  # gan loss is added after epoch
-
     print('random_seed: ', opt.seed)
     engine.train(train_dataloader_fusion)
 
