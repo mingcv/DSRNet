@@ -29,7 +29,7 @@ class TrainOptions(BaseOptions):
         self.parser.add_argument('--nEpochs', '-n', type=int, default=60, help='# of epochs to run')
         self.parser.add_argument('--lr', type=float, default=1e-4, help='initial learning rate for adam')
         self.parser.add_argument('--wd', type=float, default=0, help='weight decay for adam')
-
+        self.parser.add_argument('--num_train', type=int, default=-1)
         self.parser.add_argument('--r_pixel_weight', '-rw', type=float, default=1.0, help='weight for r_pixel loss')
 
         # data augmentation
