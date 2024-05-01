@@ -30,8 +30,6 @@ eval_dataset_solidobject = datasets.DSRTestDataset(join(datadir, 'SIR2/SolidObje
 eval_dataset_wild = datasets.DSRTestDataset(join(datadir, 'SIR2/WildSceneDataset'),
                                              if_align=opt.if_align)
 
-eval_dataset_nature = datasets.DSRTestDataset(join(datadir, 'Nature'), if_align=opt.if_align)
-
 eval_dataloader_real = datasets.DataLoader(
     eval_dataset_real, batch_size=1, shuffle=True,
     num_workers=opt.nThreads, pin_memory=True)
@@ -48,9 +46,6 @@ eval_dataloader_wild = datasets.DataLoader(
     eval_dataset_wild, batch_size=1, shuffle=False,
     num_workers=opt.nThreads, pin_memory=True)
 
-eval_dataloader_nature = datasets.DataLoader(
-    eval_dataset_nature, batch_size=1, shuffle=False,
-    num_workers=opt.nThreads, pin_memory=True)
 engine = Engine(opt)
 
 """Main Loop"""
