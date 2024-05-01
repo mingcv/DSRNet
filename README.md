@@ -12,23 +12,30 @@
 ```pip install -r requirements.txt```
 ### Data Preparation
 
+
 #### Training dataset
 * 7,643 images from the
-  [Pascal VOC dataset](http://host.robots.ox.ac.uk/pascal/VOC/), center-cropped as 224 x 224 slices to synthesize training pairs.
-* 90 real-world training pairs provided by [Zhang *et al.*](https://github.com/ceciliavision/perceptual-reflection-removal)
+  [Pascal VOC dataset](http://host.robots.ox.ac.uk/pascal/VOC/), center-cropped as 224 x 224 slices to synthesize training pairs;
+* 90 real-world training pairs provided by [Zhang *et al.*](https://github.com/ceciliavision/perceptual-reflection-removal;
+* 200 real-world training pairs provided by [IBCLN](https://github.com/JHL-HUST/IBCLN) (In our training setting 2, &dagger; labeled in our paper).
 
 #### Testing dataset
-* 45 real-world testing images from [CEILNet dataset](https://github.com/fqnchina/CEILNet).
-* 20 real testing pairs provided by [Zhang *et al.*](https://github.com/ceciliavision/perceptual-reflection-removal)
+* 45 real-world testing images from [CEILNet dataset](https://github.com/fqnchina/CEILNet);
+* 20 real testing pairs provided by [Zhang *et al.*](https://github.com/ceciliavision/perceptual-reflection-removal);
+* 20 real testing pairs provided by [IBCLN](https://github.com/JHL-HUST/IBCLN);
 * 454 real testing pairs from [SIR^2 dataset](https://sir2data.github.io/), containing three subsets (i.e., Objects (200), Postcard (199), Wild (55)). 
 
 Download all in one by [Google Drive](https://drive.google.com/file/d/1hFZItZAzAt-LnfNj-2phBRwqplDUasQy/view?usp=sharing) or [百度云](https://pan.baidu.com/s/15zlk5o_-kx3ruKj4KfOvtA?pwd=1231).
 ### Usage
 
 #### Training 
-```python train_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset --loss losses  --name dsrnet_l  --lambda_vgg 0.01 --lambda_rec 0.2 --if_align --seed 2018 --base_dir "[YOUR DATA DIR]"```
+Setting I (w/o Nature): ```python train_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset --loss losses  --name dsrnet_l  --lambda_vgg 0.01 --lambda_rec 0.2 --if_align --seed 2018 --base_dir "[YOUR DATA DIR]"```
+
+Setting II (w/ Nature): ```python train_sirs_4000.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset --loss losses  --name dsrnet_l_4000  --lambda_vgg 0.01 --lambda_rec 0.2 --if_align --seed 2018 --base_dir "[YOUR DATA DIR]"```
 #### Evaluation 
-```python eval_sirs.py --inet dsrnet_s --model dsrnet_model_sirs --dataset sirs_dataset  --name dsrnet_s_test --hyper --if_align --resume --weight_path "./weights/dsrnet_s_epoch14.pt" --base_dir "[YOUR_DATA_DIR]"```
+Setting I (w/o Nature): ```python eval_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset  --name dsrnet_l_test --if_align --resume --weight_path "./weights/dsrnet_l_epoch18.pt" --base_dir "[YOUR_DATA_DIR]"```
+
+Setting II (w/ Nature): ```python eval_sirs_4000.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset  --name dsrnet_l_4000_test --if_align --resume --weight_path "./weights/dsrnet_l_4000_epoch33.pt" --base_dir "[YOUR_DATA_DIR]"```
 
 More commands can be found in [scripts.sh](https://github.com/mingcv/DSRNet/blob/main/scripts.sh).
 
