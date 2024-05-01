@@ -43,7 +43,7 @@ More commands can be found in [scripts.sh](https://github.com/mingcv/DSRNet/blob
 
 Download the trained weights by [Google Drive](https://drive.google.com/drive/folders/1AIS9-EgBN3_q-TCq7W0j5OeWMgLO_de0?usp=sharing) or [百度云](https://pan.baidu.com/s/17jW9oBAfIZ03FKa3jc-qig?pwd=1231) and drop them into the "weights" dir.
 
-![image](https://github.com/mingcv/DSRNet/assets/31566437/d4f75a0e-bee2-41d8-9d70-ef0ada38e685)
+![image](https://github.com/mingcv/DSRNet/assets/31566437/afffde3b-aadc-4d22-93e3-a35f450e17c6)
 
 
 #### Visual comparison on real20 and SIR^2
