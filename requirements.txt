@@ -9,3 +9,4 @@ tensorboardX==2.6.2.2
 torch
 torchvision
 visdom==0.2.4
+pytorch_msssim==1.0.0
