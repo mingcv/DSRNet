@@ -127,7 +127,6 @@ class DSRNetBase(BaseModel):
             output_i, output_j, output_rr = self.forward()
             output_i = tensor2im(output_i)
             output_j = tensor2im(output_j)
-            output_rr = tensor2im(output_rr)
             if self.data_name is not None and savedir is not None:
                 Image.fromarray(output_i.astype(np.uint8)).save(join(savedir, name, '{}_l.png'.format(self.opt.name)))
                 Image.fromarray(output_j.astype(np.uint8)).save(join(savedir, name, '{}_r.png'.format(self.opt.name)))
