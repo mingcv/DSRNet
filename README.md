@@ -39,6 +39,11 @@ Setting II (w/ Nature): ```python eval_sirs_4000.py --inet dsrnet_l --model dsrn
 
 More commands can be found in [scripts.sh](https://github.com/mingcv/DSRNet/blob/main/scripts.sh).
 
+#### Testing
+Setting I (w/o Nature): ```python test_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset  --name dsrnet_l_test --hyper --if_align --resume --weight_path "./weights/dsrnet_l_epoch18.pt" --base_dir "[YOUR_DATA_DIR]"```
+
+Setting II (w/ Nature): ```python test_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset  --name dsrnet_l_4000_test --hyper --if_align --resume --weight_path "./weights/dsrnet_l_4000_epoch33.pt" --base_dir "[YOUR_DATA_DIR]"```
+
 #### Trained weights
 
 Download the trained weights by [Google Drive](https://drive.google.com/drive/folders/1AIS9-EgBN3_q-TCq7W0j5OeWMgLO_de0?usp=sharing) or [百度云](https://pan.baidu.com/s/17jW9oBAfIZ03FKa3jc-qig?pwd=1231) and drop them into the "weights" dir.
