@@ -17,7 +17,7 @@ opt.no_log = True
 opt.display_id = 0
 opt.verbose = False
 
-test_dataset_real = datasets.RealDataset('./data')
+test_dataset_real = datasets.RealDataset(opt.base_dir)
 
 test_dataloader_real = datasets.DataLoader(test_dataset_real, batch_size=1, shuffle=True, num_workers=opt.nThreads,
                                            pin_memory=True)
