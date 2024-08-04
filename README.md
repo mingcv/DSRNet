@@ -31,18 +31,18 @@ Download all in one by [Google Drive](https://drive.google.com/file/d/1hFZItZAzA
 #### Training 
 Setting I (w/o Nature): ```python train_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset --loss losses  --name dsrnet_l  --lambda_vgg 0.01 --lambda_rec 0.2 --if_align --seed 2018 --base_dir "[YOUR DATA DIR]"```
 
-Setting II (w/ Nature): ```python train_sirs_4000.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset --loss losses  --name dsrnet_l_4000  --lambda_vgg 0.01 --lambda_rec 0.2 --if_align --seed 2018 --base_dir "[YOUR DATA DIR]"```
+Setting II (w/ Nature): ```python train_sirs_4000.py --inet dsrnet_l_nature --model dsrnet_model_sirs --dataset sirs_dataset --loss losses  --name dsrnet_l_4000  --lambda_vgg 0.01 --lambda_rec 0.2 --if_align --seed 2018 --base_dir "[YOUR DATA DIR]"```
 #### Evaluation 
 Setting I (w/o Nature): ```python eval_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset  --name dsrnet_l_test --if_align --resume --weight_path "./weights/dsrnet_l_epoch18.pt" --base_dir "[YOUR_DATA_DIR]"```
 
-Setting II (w/ Nature): ```python eval_sirs_4000.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset  --name dsrnet_l_4000_test --if_align --resume --weight_path "./weights/dsrnet_l_4000_epoch33.pt" --base_dir "[YOUR_DATA_DIR]"```
+Setting II (w/ Nature): ```python eval_sirs_4000.py --inet dsrnet_l_nature --model dsrnet_model_sirs --dataset sirs_dataset  --name dsrnet_l_4000_test --if_align --resume --weight_path "./weights/dsrnet_l_4000_epoch33.pt" --base_dir "[YOUR_DATA_DIR]"```
 
 More commands can be found in [scripts.sh](https://github.com/mingcv/DSRNet/blob/main/scripts.sh).
 
 #### Testing
 Setting I (w/o Nature): ```python test_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset  --name dsrnet_l_test --hyper --if_align --resume --weight_path "./weights/dsrnet_l_epoch18.pt" --base_dir "[YOUR_DATA_DIR]"```
 
-Setting II (w/ Nature): ```python test_sirs.py --inet dsrnet_l --model dsrnet_model_sirs --dataset sirs_dataset  --name dsrnet_l_4000_test --hyper --if_align --resume --weight_path "./weights/dsrnet_l_4000_epoch33.pt" --base_dir "[YOUR_DATA_DIR]"```
+Setting II (w/ Nature): ```python test_sirs.py --inet dsrnet_l_nature --model dsrnet_model_sirs --dataset sirs_dataset  --name dsrnet_l_4000_test --hyper --if_align --resume --weight_path "./weights/dsrnet_l_4000_epoch33.pt" --base_dir "[YOUR_DATA_DIR]"```
 
 #### Trained weights
 
