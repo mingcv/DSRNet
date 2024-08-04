@@ -222,7 +222,7 @@ class FeaturePyramidVGG(nn.Module):
 
 class DSRNet(nn.Module):
     def __init__(self, in_channels=3, out_channels=3, width=48, middle_blk_num=1,
-                 enc_blk_nums=[], dec_blk_nums=[], shared_b=False):
+                 enc_blk_nums=[], dec_blk_nums=[], lrm_blk_nums=[], shared_b=False):
         super().__init__()
         self.intro = FeaturePyramidVGG(width, shared_b)
         self.ending = DualStreamBlock(nn.Conv2d(width, out_channels, 3, padding=1))
@@ -231,7 +231,7 @@ class DSRNet(nn.Module):
         self.middle_blks = nn.ModuleList()
         self.ups = nn.ModuleList()
         self.downs = nn.ModuleList()
-        self.lrm = LRM(width)
+        self.lrm = LRM(width, num_blocks=lrm_blk_nums)
 
         c = width
         for num in enc_blk_nums:
