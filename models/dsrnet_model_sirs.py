@@ -245,15 +245,18 @@ class DSRNetModel(DSRNetBase):
     def load(self, model):
         weight_path = model.opt.weight_path
         state_dict = torch.load(weight_path)
-        
-        model.epoch = state_dict['epoch']
-        model.iterations = state_dict['iterations']
-        model.network.load_state_dict(state_dict['weight'], strict=False)
-        
-        if model.isTrain:
-            model.optimizer_G.load_state_dict(state_dict['opt_g'])
-
-        print('Resume from epoch %d, iteration %d' % (model.epoch, model.iterations))
+        if 'epoch' in state_dict:
+            model.epoch = state_dict['epoch']
+            model.iterations = state_dict['iterations']
+            model.network.load_state_dict(state_dict['weight'], strict=False)
+            
+            if model.isTrain:
+                model.optimizer_G.load_state_dict(state_dict['opt_g'])
+            print('Resume from epoch %d, iteration %d' % (model.epoch, model.iterations))
+        else:
+            ret = model.network.load_state_dict(state_dict)
+            print("Pretrained weight loaded: ", ret)
+            
         return state_dict
 
     def state_dict(self, save_extra_state=True):
