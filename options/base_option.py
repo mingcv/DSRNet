@@ -16,7 +16,7 @@ class BaseOptions():
         self.parser.add_argument('--name', type=str, default=None,
                                  help='name of the experiment. It decides where to store samples and models')
         self.parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
-        self.parser.add_argument('--model', type=str, default='errnet_model', help='chooses which model to use.')
+        self.parser.add_argument('--model', type=str, default='dsrnet_model_sirs', help='chooses which model to use.')
         self.parser.add_argument('--dataset', '-d', type=str, default='sirs_dataset',
                                  help='chooses which dataset to use.')
         self.parser.add_argument('--loss', '-l', type=str, default='losses',
