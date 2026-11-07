@@ -244,7 +244,7 @@ class DSRNetModel(DSRNetBase):
 
     def load(self, model):
         weight_path = model.opt.weight_path
-        state_dict = torch.load(weight_path)
+        state_dict = torch.load(weight_path, weights_only=True)
         if 'epoch' in state_dict:
             model.epoch = state_dict['epoch']
             model.iterations = state_dict['iterations']
